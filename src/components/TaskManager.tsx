@@ -12,8 +12,8 @@ const TaskManager = () => {
 
   // Intentional bug: The filter conditions are reversed.
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "completed") return task.completed === false;
-    if (filter === "pending") return task.completed === true;
+    if (filter === "completed") return task.completed === true;
+    if (filter === "pending") return task.completed === false;
     return true;
   });
 
