@@ -30,13 +30,11 @@ const TaskManager = () => {
     setNewTask("");
   };
 
-  // Intentional bug: Directly mutating the tasks array when deleting.
   const handleDeleteTask = (id: number) => {
-    const index = tasks.findIndex((task) => task.id === id);
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      setTasks(tasks);
-    }
+    // Create a new array that excludes the task with the specified id
+    const newTasks = tasks.filter((task) => task.id !== id);
+    // Update the state with the new array
+    setTasks(newTasks);
   };
 
   const toggleTaskCompletion = (id: number) => {
