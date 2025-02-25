@@ -59,16 +59,22 @@ const TaskManager = () => {
         </button>
       </form>
       <div className="flex justify-around mb-4">
-        <button onClick={() => setFilter("all")} className="text-gray-700">
+        <button
+          onClick={() => setFilter('all')}
+          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
+        >
           All
         </button>
         <button
-          onClick={() => setFilter("completed")}
-          className="text-gray-700"
+          onClick={() => setFilter('completed')}
+          className={`px-4 py-2 rounded ${filter === 'completed' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
         >
           Completed
         </button>
-        <button onClick={() => setFilter("pending")} className="text-gray-700">
+        <button
+          onClick={() => setFilter('pending')}
+          className={`px-4 py-2 rounded ${filter === 'pending' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
+        >
           Pending
         </button>
       </div>
@@ -83,7 +89,7 @@ const TaskManager = () => {
         ))}
       </ul>
     </div>
-  );
+);
 };
 
 export default TaskManager;
