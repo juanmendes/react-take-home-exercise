@@ -1,6 +1,16 @@
 import React from "react";
 
-const TaskItem = ({ task, onDelete, onToggle }: any) => {
+
+interface TaskItemProps {
+    task: {
+        id: number;
+        title: string;
+        completed: boolean;
+    };
+    onDelete: (id: number) => void;
+    onToggle: (id: number) => void;
+}
+const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete, onToggle }: any) => {
   return (
     <li className="flex items-center justify-between border-b py-2">
       <span

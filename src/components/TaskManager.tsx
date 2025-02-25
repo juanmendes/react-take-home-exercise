@@ -38,9 +38,17 @@ const TaskManager = () => {
   };
 
   const toggleTaskCompletion = (id: number) => {
-    const task = tasks.find((task) => task.id === id);
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        // Create a new object for the task with toggled completion status
+        return { ...task, completed: !task.completed };
+      }
+      // Return the task unchanged if it doesn't match the id
+      return task;
+    });
 
-    task.isCompleted = !task.isCompleted;
+    // Update the state with the new array
+    setTasks(updatedTasks);
   };
 
   return (

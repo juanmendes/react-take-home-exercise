@@ -1,0 +1,112 @@
+Subject: [PATCH] Fix toggling completed state of tasks
+---
+Index: src/components/TaskItem.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/TaskItem.tsx b/src/components/TaskItem.tsx
+--- a/src/components/TaskItem.tsx	(revision 9d221c5d562942c04f9cdd10b73f33d8244eb371)
++++ b/src/components/TaskItem.tsx	(revision 48ca701f93be96e5f5d2f72565f61ba45c62126b)
+@@ -1,6 +1,16 @@
+ import React from "react";
+ 
+-const TaskItem = ({ task, onDelete, onToggle }: any) => {
++
++interface TaskItemProps {
++    task: {
++        id: number;
++        title: string;
++        completed: boolean;
++    };
++    onDelete: (id: number) => void;
++    onToggle: (id: number) => void;
++}
++const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete, onToggle }: any) => {
+   return (
+     <li className="flex items-center justify-between border-b py-2">
+       <span
+Index: src/components/TaskManager.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/TaskManager.tsx b/src/components/TaskManager.tsx
+--- a/src/components/TaskManager.tsx	(revision 9d221c5d562942c04f9cdd10b73f33d8244eb371)
++++ b/src/components/TaskManager.tsx	(revision 48ca701f93be96e5f5d2f72565f61ba45c62126b)
+@@ -39,20 +39,28 @@
+   };
+ 
+   const toggleTaskCompletion = (id: number) => {
+-    const task = tasks.find((task) => task.id === id);
++    const updatedTasks = tasks.map((task) => {
++      if (task.id === id) {
++        // Create a new object for the task with toggled completion status
++        return { ...task, completed: !task.completed };
++      }
++      // Return the task unchanged if it doesn't match the id
++      return task;
++    });
+ 
+-    task.isCompleted = !task.isCompleted;
++    // Update the state with the new array
++    setTasks(updatedTasks);
+   };
+ 
+   return (
+     <div className="container mx-auto bg-white p-4 rounded shadow">
+       <form onSubmit={handleAddTask} className="mb-4 flex">
+         <input
+-            type="text"
+-            placeholder="New task..."
+-            value={newTask}
+-            onChange={(e) => setNewTask(e.target.value)}
+-            className="flex-grow border rounded-l py-2 px-3"
++          type="text"
++          placeholder="New task..."
++          value={newTask}
++          onChange={(e) => setNewTask(e.target.value)}
++          className="flex-grow border rounded-l py-2 px-3"
+         />
+         <button type="submit" className="bg-blue-500 text-white px-4 rounded-r">
+           Add
+@@ -60,8 +68,8 @@
+       </form>
+       <div className="flex justify-around mb-4">
+         <button
+-            onClick={() => setFilter('all')}
+-            className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
++          onClick={() => setFilter('all')}
++          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
+         >
+           All
+         </button>
+@@ -72,20 +80,20 @@
+           Completed
+         </button>
+         <button
+-            onClick={() => setFilter('pending')}
+-            className={`px-4 py-2 rounded ${filter === 'pending' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
++          onClick={() => setFilter('pending')}
++          className={`px-4 py-2 rounded ${filter === 'pending' ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
+         >
+           Pending
+         </button>
+       </div>
+       <ul>
+         {filteredTasks.map((task) => (
+-            <TaskItem
+-                key={task.id}
+-                task={task}
+-                onDelete={handleDeleteTask}
+-                onToggle={toggleTaskCompletion}
+-            />
++        <TaskItem
++          key={task.id}
++          task={task}
++          onDelete={handleDeleteTask}
++          onToggle={toggleTaskCompletion}
++        />
+         ))}
+       </ul>
+     </div>
