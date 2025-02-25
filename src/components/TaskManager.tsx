@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import TaskItem from "./TaskItem";
 import ITaskItem from "../types/ITaskItem";
 
 const TaskManager = () => {
-  const [tasks, setTasks] = useState<ITaskItem[]>([
-    { id: 1, title: "Buy groceries", completed: false },
-    { id: 2, title: "Clean the house", completed: true },
-  ]);
+  // Load initial tasks from localStorage or give it default values
+  const [tasks, setTasks] = useState<ITaskItem[]>(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [
+      { id: 1, title: "Buy groceries", completed: false },
+      { id: 2, title: "Clean the house", completed: true },
+    ];
+  });
   const [filter, setFilter] = useState("all");
-  const [newTask, setNewTask] = useState<string>();
+  const [newTask, setNewTask] = useState<string>("Task Name");
+
+  // Sync tasks to localStorage whenever tasks change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   // Intentional bug: The filter conditions are reversed.
   const filteredTasks = tasks.filter((task) => {
