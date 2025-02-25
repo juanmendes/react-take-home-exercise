@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
 import TaskItem from "./TaskItem";
+import ITaskItem from "../types/ITaskItem";
 
 const TaskManager = () => {
-  const [tasks, setTasks] = useState<any[]>([
+  const [tasks, setTasks] = useState<ITaskItem[]>([
     { id: 1, title: "Buy groceries", completed: false },
     { id: 2, title: "Clean the house", completed: true },
   ]);
@@ -20,9 +21,9 @@ const TaskManager = () => {
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTask!.trim() === "") return;
-    const newTaskObj = {
+    const newTaskObj: ITaskItem = {
       id: tasks.length + 1,
-      name: newTask,
+      title: newTask,
       completed: false,
     };
     setTasks([...tasks, newTaskObj]);
